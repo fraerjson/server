@@ -1,4 +1,5 @@
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
 from server_app.models import *
 
@@ -13,6 +14,7 @@ class WalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallet
         fields = "__all__"
+
 
 
 class UsersSerializer(serializers.ModelSerializer):
@@ -38,7 +40,7 @@ class WalletTransactionsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Wallet
-        fields = ['users', 'balance', 'bitcoin', 'ethereum', 'litecoin', 'binance_coin', 'cardano', 'solana', 'wallet']
+        fields = ['users', 'amount', 'currency']
 
 
 class ClanUsersSerializer(serializers.ModelSerializer):
@@ -50,9 +52,9 @@ class ClanUsersSerializer(serializers.ModelSerializer):
 
 
 class UsersWalletsSerializer(serializers.ModelSerializer):
-    wallet = WalletSerializer(read_only=True, source='wallets')
+    wallet = WalletSerializer(read_only=True, many=True, source='wallets')
 
     class Meta:
         model = Users
-        fields = ['name', 'phone_number', 'tg_id', 'tier', 'data', 'clan', 'wallet'] # 'name', 'overall_balance', 'balance', 'phone_number', 'tg_id', 'tier',
+        fields = ['name', 'phone_number', 'password', 'tg_id', 'tier', 'data', 'clan', 'wallet'] # 'name', 'overall_balance', 'balance', 'phone_number', 'tg_id', 'tier',
 

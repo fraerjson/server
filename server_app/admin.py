@@ -20,12 +20,12 @@ class PromoCodesAdmin(admin.ModelAdmin):
 
 @admin.register(Wallet)
 class WalletAdmin(admin.ModelAdmin):
-    list_display = ("users", "balance")
+    list_display = ("users", "currency", "amount")
 
 
 @admin.register(Transactions)
 class TransactionsAdmin(admin.ModelAdmin):
-    list_display = ("sender", "recipient")
+    list_display = ("sender", "recipient", "currency")
 
 
 

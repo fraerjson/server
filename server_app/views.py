@@ -43,11 +43,6 @@ class WalletList(generics.ListCreateAPIView):
     queryset = Wallet.objects.all()
     serializer_class = WalletSerializer
 
-    def list(self, request, pk):
-        wishlist = get_list_or_404(Wallet, user=pk)
-        data = serializers.UserWishlistSerializer(wishlist).data
-        return Response(data, status=status.HTTP_200_OK)
-
 
 class TransactionsList(generics.ListCreateAPIView):
     queryset = Transactions.objects.all()
@@ -86,6 +81,13 @@ class UsersListView(generics.ListAPIView):
     filterset_fields = ['phone_number', 'password']
 
 
+class GetPasswordListView(generics.ListAPIView):
+    queryset = Users.objects.all()
+    serializer_class = UsersSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['password', 'tg_id']
+
+
 class NameListView(generics.ListAPIView):
     queryset = Users.objects.all()
     serializer_class = UsersSerializer
@@ -106,4 +108,15 @@ class TgIdListView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['tg_id']
 
+
+class WalletIdListView(generics.ListAPIView):
+    queryset = Wallet.objects.all()
+    serializer_class = WalletSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['users', 'currency']
+
+
+class WalletsRetrieve(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Wallet.objects.all()
+    serializer_class = WalletSerializer
 
