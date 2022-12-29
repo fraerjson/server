@@ -12,14 +12,15 @@ class Clan(models.Model):
 
 class Users(models.Model):
     TIERS = (
-        ("A", "Admin"),
         ("U", "User"),
-        ("G", "Gold"),
-        ("S", "Silver"),
         ("B", "Bronze"),
+        ("S", "Silver"),
+        ("G", "Gold"),
+        ("A", "Admin"),
+
     )
     name = models.TextField(verbose_name="Никнэйм", max_length=20)
-    password = models.TextField(verbose_name="Пароль", max_length=20)
+    password = models.TextField(verbose_name="Пароль", max_length=100)
     phone_number = models.TextField(verbose_name="Номер телефона")
     tg_id = models.CharField(verbose_name="Телеграмм айди", max_length=100)
     data = models.DateTimeField(auto_now_add=True)
@@ -40,12 +41,12 @@ class Wallet(models.Model):
         ("USD", "dollar"),
         ("BTC", "bitcoin"),
         ("ETH", "ethereum"),
-        ("LIT", "litecoin"),
+        ("ADA", "cardano"),
         ("BNB", "binance_coin"),
-        ("CRD", "cardano"),
-        ("SOL", "solana"),
+        ("XRP", "xrp"),
+        ("DOGE", "dogecoin"),
     )
-    currency = models.CharField(max_length=3, choices=CURRENCY, null=True, blank=True)
+    currency = models.CharField(max_length=4, choices=CURRENCY, null=True, blank=True)
     users = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='wallets')
     amount = models.FloatField(verbose_name="Баланс", max_length=30)
 
@@ -58,20 +59,23 @@ class Transactions(models.Model):
         ("USD", "dollar"),
         ("BTC", "bitcoin"),
         ("ETH", "ethereum"),
-        ("LIT", "litecoin"),
+        ("ADA", "cardano"),
         ("BNB", "binance_coin"),
-        ("CRD", "cardano"),
-        ("SOL", "solana"),
+        ("XRP", "xrp"),
+        ("DOGE", "dogecoin"),
     )
-    currency = models.CharField(max_length=3, choices=CURRENCY, null=True, blank=True)
     date = models.DateTimeField(verbose_name='Дата оплаты', auto_now_add=True)
     sender = models.TextField(verbose_name='Отправитель')
+    sender_currency = models.CharField(max_length=4, choices=CURRENCY, null=True, blank=True)
+    send_amount = models.FloatField(verbose_name='Отпраленно средств', max_length=100, default=0)
     recipient = models.TextField(verbose_name='Получатель')
-    amount_minus = models.TextField(verbose_name='Количество снятых средств')
+    recipient_currency = models.CharField(max_length=4, choices=CURRENCY, null=True, blank=True)
+    received_amount = models.FloatField(verbose_name='Полученно стредств', max_length=100, default=0)
+    commission = models.FloatField(verbose_name="Комисиия", max_length=100, default=0)
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name="transactions")
 
     def __str__(self):
-        return f"{self.sender} | {self.recipient} | {self.currency}"
+        return f"{self.sender} | {self.recipient} | {self.sender_currency} | {self.recipient_currency}"
 
 
 # class Wallet(models.Model):

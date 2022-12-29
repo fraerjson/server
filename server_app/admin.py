@@ -25,7 +25,7 @@ class WalletAdmin(admin.ModelAdmin):
 
 @admin.register(Transactions)
 class TransactionsAdmin(admin.ModelAdmin):
-    list_display = ("sender", "recipient", "currency")
+    list_display = ("sender", "recipient", "sender_currency", "recipient_currency")
 
 
 
